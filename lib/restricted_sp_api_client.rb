@@ -18,10 +18,7 @@ module AmzSpApi
 
     alias_method :super_call_api, :call_api
     def call_api(http_method, path, opts = {})
-      unsigned_request = build_request(http_method, path, opts)
-      aws_headers = auth_headers(http_method, unsigned_request.url, unsigned_request.encoded_body)
-      signed_opts = opts.merge(:header_params => aws_headers.merge(opts[:header_params] || {}))
-      super(http_method, path, signed_opts)
+      super(http_method, path, opts.merge(header_params: auth_headers.merge(opts[:header_params] || {})))
     end
 
     private
@@ -46,7 +43,7 @@ module AmzSpApi
         expires_in: response.expires_in}
     end
 
-    def auth_headers(http_method, url, body)
+    def auth_headers
       { 'x-amz-access-token' => retrieve_rdt_access_token }
     end
   end

@@ -21,10 +21,10 @@ module AmzSpApi
 
     def retrieve_lwa_access_token
       return request_lwa_access_token[:access_token] unless config.get_access_token
-      stored_token = config.get_access_token.call(config.access_token_key)
+      stored_token = config.get_access_token.call(cache_key)
       if stored_token.nil?
         new_token = request_lwa_access_token
-        config.save_access_token&.call(config.access_token_key, new_token)
+        config.save_access_token&.call(cache_key, new_token)
         return new_token[:access_token]
       else
         return stored_token
@@ -72,6 +72,10 @@ module AmzSpApi
 
     def auth_headers
       { 'x-amz-access-token' => retrieve_lwa_access_token }
+    end
+
+    def cache_key
+      @grantless ? "#{config.access_token_key}-GLS" : config.access_token_key
     end
   end
 end

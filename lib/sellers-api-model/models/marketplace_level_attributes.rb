@@ -12,25 +12,58 @@ Swagger Codegen version: 3.0.61
 require 'date'
 
 module AmzSpApi::SellersApiModel
-  # The response schema for the `getMarketplaceParticipations` operation.
-  class GetMarketplaceParticipationsResponse
-    attr_accessor :payload
+  # Attributes that define the seller's presence and status within a specific marketplace. These attributes include the marketplace details, store name, listing status, and the selling plan the seller is subscribed to.
+  class MarketplaceLevelAttributes
+    attr_accessor :marketplace
 
-    attr_accessor :errors
+    # The name of the seller's store as displayed in the marketplace.
+    attr_accessor :store_name
+
+    # The current status of the seller's listings.
+    attr_accessor :listing_status
+
+    # The selling plan details.
+    attr_accessor :selling_plan
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'payload' => :'payload',
-        :'errors' => :'errors'
+        :'marketplace' => :'marketplace',
+        :'store_name' => :'storeName',
+        :'listing_status' => :'listingStatus',
+        :'selling_plan' => :'sellingPlan'
       }
     end
 
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'payload' => :'Object',
-        :'errors' => :'Object'
+        :'marketplace' => :'Object',
+        :'store_name' => :'Object',
+        :'listing_status' => :'Object',
+        :'selling_plan' => :'Object'
       }
     end
 
@@ -44,23 +77,31 @@ module AmzSpApi::SellersApiModel
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `AmzSpApi::SellersApiModel::GetMarketplaceParticipationsResponse` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `AmzSpApi::SellersApiModel::MarketplaceLevelAttributes` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `AmzSpApi::SellersApiModel::GetMarketplaceParticipationsResponse`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `AmzSpApi::SellersApiModel::MarketplaceLevelAttributes`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'payload')
-        self.payload = attributes[:'payload']
+      if attributes.key?(:'marketplace')
+        self.marketplace = attributes[:'marketplace']
       end
 
-      if attributes.key?(:'errors')
-        self.errors = attributes[:'errors']
+      if attributes.key?(:'store_name')
+        self.store_name = attributes[:'store_name']
+      end
+
+      if attributes.key?(:'listing_status')
+        self.listing_status = attributes[:'listing_status']
+      end
+
+      if attributes.key?(:'selling_plan')
+        self.selling_plan = attributes[:'selling_plan']
       end
     end
 
@@ -68,13 +109,57 @@ module AmzSpApi::SellersApiModel
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if @marketplace.nil?
+        invalid_properties.push('invalid value for "marketplace", marketplace cannot be nil.')
+      end
+
+      if @store_name.nil?
+        invalid_properties.push('invalid value for "store_name", store_name cannot be nil.')
+      end
+
+      if @listing_status.nil?
+        invalid_properties.push('invalid value for "listing_status", listing_status cannot be nil.')
+      end
+
+      if @selling_plan.nil?
+        invalid_properties.push('invalid value for "selling_plan", selling_plan cannot be nil.')
+      end
+
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if @marketplace.nil?
+      return false if @store_name.nil?
+      return false if @listing_status.nil?
+      listing_status_validator = EnumAttributeValidator.new('Object', ['ACTIVE', 'INACTIVE'])
+      return false unless listing_status_validator.valid?(@listing_status)
+      return false if @selling_plan.nil?
+      selling_plan_validator = EnumAttributeValidator.new('Object', ['PROFESSIONAL', 'INDIVIDUAL'])
+      return false unless selling_plan_validator.valid?(@selling_plan)
       true
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] listing_status Object to be assigned
+    def listing_status=(listing_status)
+      validator = EnumAttributeValidator.new('Object', ['ACTIVE', 'INACTIVE'])
+      unless validator.valid?(listing_status)
+        fail ArgumentError, "invalid value for \"listing_status\", must be one of #{validator.allowable_values}."
+      end
+      @listing_status = listing_status
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] selling_plan Object to be assigned
+    def selling_plan=(selling_plan)
+      validator = EnumAttributeValidator.new('Object', ['PROFESSIONAL', 'INDIVIDUAL'])
+      unless validator.valid?(selling_plan)
+        fail ArgumentError, "invalid value for \"selling_plan\", must be one of #{validator.allowable_values}."
+      end
+      @selling_plan = selling_plan
     end
 
     # Checks equality by comparing each attribute.
@@ -82,8 +167,10 @@ module AmzSpApi::SellersApiModel
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          payload == o.payload &&
-          errors == o.errors
+          marketplace == o.marketplace &&
+          store_name == o.store_name &&
+          listing_status == o.listing_status &&
+          selling_plan == o.selling_plan
     end
 
     # @see the `==` method
@@ -95,7 +182,7 @@ module AmzSpApi::SellersApiModel
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [payload, errors].hash
+      [marketplace, store_name, listing_status, selling_plan].hash
     end
 
     # Builds the object from hash

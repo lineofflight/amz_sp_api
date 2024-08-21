@@ -12,25 +12,47 @@ Swagger Codegen version: 3.0.61
 require 'date'
 
 module AmzSpApi::SellersApiModel
-  # The response schema for the `getMarketplaceParticipations` operation.
-  class GetMarketplaceParticipationsResponse
-    attr_accessor :payload
+  # Represents an address
+  class Address
+    # Street address information.
+    attr_accessor :address_line1
 
-    attr_accessor :errors
+    # Additional street address information.
+    attr_accessor :address_line2
+
+    # The country code in two-character ISO 3166-1 alpha-2 format.
+    attr_accessor :country_code
+
+    # The state or province code.
+    attr_accessor :state_or_province_code
+
+    # The city.
+    attr_accessor :city
+
+    # The postal code.
+    attr_accessor :postal_code
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'payload' => :'payload',
-        :'errors' => :'errors'
+        :'address_line1' => :'addressLine1',
+        :'address_line2' => :'addressLine2',
+        :'country_code' => :'countryCode',
+        :'state_or_province_code' => :'stateOrProvinceCode',
+        :'city' => :'city',
+        :'postal_code' => :'postalCode'
       }
     end
 
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'payload' => :'Object',
-        :'errors' => :'Object'
+        :'address_line1' => :'Object',
+        :'address_line2' => :'Object',
+        :'country_code' => :'Object',
+        :'state_or_province_code' => :'Object',
+        :'city' => :'Object',
+        :'postal_code' => :'Object'
       }
     end
 
@@ -44,23 +66,39 @@ module AmzSpApi::SellersApiModel
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `AmzSpApi::SellersApiModel::GetMarketplaceParticipationsResponse` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `AmzSpApi::SellersApiModel::Address` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `AmzSpApi::SellersApiModel::GetMarketplaceParticipationsResponse`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `AmzSpApi::SellersApiModel::Address`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'payload')
-        self.payload = attributes[:'payload']
+      if attributes.key?(:'address_line1')
+        self.address_line1 = attributes[:'address_line1']
       end
 
-      if attributes.key?(:'errors')
-        self.errors = attributes[:'errors']
+      if attributes.key?(:'address_line2')
+        self.address_line2 = attributes[:'address_line2']
+      end
+
+      if attributes.key?(:'country_code')
+        self.country_code = attributes[:'country_code']
+      end
+
+      if attributes.key?(:'state_or_province_code')
+        self.state_or_province_code = attributes[:'state_or_province_code']
+      end
+
+      if attributes.key?(:'city')
+        self.city = attributes[:'city']
+      end
+
+      if attributes.key?(:'postal_code')
+        self.postal_code = attributes[:'postal_code']
       end
     end
 
@@ -68,12 +106,22 @@ module AmzSpApi::SellersApiModel
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if @address_line1.nil?
+        invalid_properties.push('invalid value for "address_line1", address_line1 cannot be nil.')
+      end
+
+      if @country_code.nil?
+        invalid_properties.push('invalid value for "country_code", country_code cannot be nil.')
+      end
+
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if @address_line1.nil?
+      return false if @country_code.nil?
       true
     end
 
@@ -82,8 +130,12 @@ module AmzSpApi::SellersApiModel
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          payload == o.payload &&
-          errors == o.errors
+          address_line1 == o.address_line1 &&
+          address_line2 == o.address_line2 &&
+          country_code == o.country_code &&
+          state_or_province_code == o.state_or_province_code &&
+          city == o.city &&
+          postal_code == o.postal_code
     end
 
     # @see the `==` method
@@ -95,7 +147,7 @@ module AmzSpApi::SellersApiModel
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [payload, errors].hash
+      [address_line1, address_line2, country_code, state_or_province_code, city, postal_code].hash
     end
 
     # Builds the object from hash

@@ -12,25 +12,31 @@ Swagger Codegen version: 3.0.61
 require 'date'
 
 module AmzSpApi::SellersApiModel
-  # The response schema for the `getMarketplaceParticipations` operation.
-  class GetMarketplaceParticipationsResponse
-    attr_accessor :payload
+  # Information about the seller's primary contact.
+  class PrimaryContact
+    # The full name of the seller's primary contact.
+    attr_accessor :name
 
-    attr_accessor :errors
+    attr_accessor :address
+
+    # The non-Latin script version of the primary contact's name, if applicable.
+    attr_accessor :non_latin_name
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'payload' => :'payload',
-        :'errors' => :'errors'
+        :'name' => :'name',
+        :'address' => :'address',
+        :'non_latin_name' => :'nonLatinName'
       }
     end
 
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'payload' => :'Object',
-        :'errors' => :'Object'
+        :'name' => :'Object',
+        :'address' => :'Object',
+        :'non_latin_name' => :'Object'
       }
     end
 
@@ -44,23 +50,27 @@ module AmzSpApi::SellersApiModel
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `AmzSpApi::SellersApiModel::GetMarketplaceParticipationsResponse` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `AmzSpApi::SellersApiModel::PrimaryContact` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `AmzSpApi::SellersApiModel::GetMarketplaceParticipationsResponse`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `AmzSpApi::SellersApiModel::PrimaryContact`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'payload')
-        self.payload = attributes[:'payload']
+      if attributes.key?(:'name')
+        self.name = attributes[:'name']
       end
 
-      if attributes.key?(:'errors')
-        self.errors = attributes[:'errors']
+      if attributes.key?(:'address')
+        self.address = attributes[:'address']
+      end
+
+      if attributes.key?(:'non_latin_name')
+        self.non_latin_name = attributes[:'non_latin_name']
       end
     end
 
@@ -68,12 +78,22 @@ module AmzSpApi::SellersApiModel
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if @name.nil?
+        invalid_properties.push('invalid value for "name", name cannot be nil.')
+      end
+
+      if @address.nil?
+        invalid_properties.push('invalid value for "address", address cannot be nil.')
+      end
+
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if @name.nil?
+      return false if @address.nil?
       true
     end
 
@@ -82,8 +102,9 @@ module AmzSpApi::SellersApiModel
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          payload == o.payload &&
-          errors == o.errors
+          name == o.name &&
+          address == o.address &&
+          non_latin_name == o.non_latin_name
     end
 
     # @see the `==` method
@@ -95,7 +116,7 @@ module AmzSpApi::SellersApiModel
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [payload, errors].hash
+      [name, address, non_latin_name].hash
     end
 
     # Builds the object from hash
